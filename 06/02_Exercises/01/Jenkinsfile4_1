@@ -6,7 +6,7 @@ pipeline {
       //variable with name of container
       //i.e. used in stage 'Run container for testing'
       containerName = "traffic-light-container"
-      token=credentials('TOKEN')
+      token=credentials('TOKEN') // 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
   }
   agent any
   tools {nodejs "node"}
