@@ -1,31 +1,22 @@
-/*
-Pipeline Part 04 Exercise a02
-*/
 pipeline {
-  environment {
-    // this entry has to be created on your dockerhub-account
-//??
-    // this is the key in Jenkins
-//??
-  }
-  agent any
-  stages {
-    stage('Cloning Repo') {
+    environment {
+        registry = 'varelambzz/traffic-light:latest'
+        registryCredential = 'varelambzz'
+    }
+    agent any
+    stages {
+        stage('Cloning repo') {
             steps {
-              script {
-                  //your repo branch
-//??
-                  //your public repo
-//??
-           }
-         }
-    }
-    stage('Building image') {
-      steps{
-        script {
-//??
+                git branch: 'main', url: 'https://github.com/varelam-bzz/traffic-light.git'
+            }
         }
-      }
+        
+        stage('Building image') {
+            steps {
+                script {
+                    docker.build registry
+                }
+            }
+        }
     }
-  }
 }

@@ -8,3 +8,9 @@ your public repo.
 2. Set up an SCM (Source code management)-pipeline in order to execute pipeline steps 
 stored in the Jenkins file
 3. Build and check the new pipeline.
+
+Create Jenkinsfile
+Create pipeline using SCM
+Git -> repo URL
+Branch: */main
+Script Path: Jenkinsfile

@@ -18,5 +18,5 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //import api
-//??
+app.use('/api', require('./api.trafficlight'));
 

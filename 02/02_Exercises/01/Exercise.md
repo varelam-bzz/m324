@@ -10,3 +10,7 @@ Node.js Runtime is installed
 
 Remark: Review Readme in the intro to set up the app correctly.
 
+```bash
+sudo apt install nodejs
+node -v # v20.17.0
+``` 

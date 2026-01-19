@@ -1,5 +1,5 @@
 # TODO: Change readydocker1 with your docker-hub account
-ARG IMG="readydocker1/jenkins2"
+ARG IMG="varelambzz/jenkins2"
 FROM ${IMG}:latest
 USER root
 RUN curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \

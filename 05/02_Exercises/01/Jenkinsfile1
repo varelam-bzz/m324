@@ -1,10 +1,10 @@
 pipeline {
     environment {
       //hardcoded REGISTRY-USER -> unsafe - only for testing
-      USER = "??"
+      USER = "varelambzz"
       //hardcoded REGISTRY-PASSWORD -> unsafe - only for testing
-      PASSWORD = "??"
-      IMAGE = "traffic-api"
+      PASSWORD = ":eAhG7ANS9w7_y9"
+      IMAGE = "traffic-light"
       BUILD_TAG = "v1.0.${BUILD_NUMBER}"
     }
 
@@ -14,8 +14,8 @@ pipeline {
       stage('Cloning Repo') {
               steps {
                 script {
-//??
-//??
+                    git branch: 'main',
+                    url: 'https://github.com/varelam-bzz/traffic-light.git'
              }
            }
       }
@@ -26,7 +26,7 @@ pipeline {
           sh """
                 set -e
                 echo "Building Docker image..."
-#??
+                docker build -t \$IMAGE:\$BUILD_TAG .
             """
           }
         }
@@ -37,13 +37,13 @@ pipeline {
             script {
                 sh """
                     echo "Logging in hub.docker.com registry"
-#??
-#??
+                    echo "\$PASSWORD" | docker login -u "\$USER" --password-stdin
+                    docker tag \$IMAGE:\$BUILD_TAG \$USER/\$IMAGE:latest
 
                     echo "Tagging latest..."
-#??
+                    docker tag \$IMAGE:\$BUILD_TAG \$USER/\$IMAGE:latest
                     echo "Pushing images..."
-#??
+                    docker push \$USER/\$IMAGE:latest
                 """
             }
         }
@@ -54,8 +54,8 @@ pipeline {
           sh """
             set -e
             echo "Removing all images"
-#??
-#??
+            docker rmi \$IMAGE:\$BUILD_TAG
+            docker rmi \$USER/\$IMAGE:latest
             set +e
           """
         }

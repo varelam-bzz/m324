@@ -1,6 +1,6 @@
 # Jenkins controller with packages
 # TODO: Change readydocker1 with your docker-hub account
-ARG IMG="readydocker1/jenkins1"
+ARG IMG="varelambzz/jenkins1"
 FROM ${IMG}:latest
 USER root
 RUN wget -O /usr/share/keyrings/jenkins-keyring.asc \
