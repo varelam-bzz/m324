@@ -1,9 +1,55 @@
+# IDE and Editor
 /.idea
-repo.sh
-/.idea
-.idea/inspectionProfiles/profiles_settings.xml
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# XML files
 *.xml
-/.idea
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+.npm
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# Build outputs
+dist/
+build/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+logs/
+*.log
+
+# Docker
+.dockerignore
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Project specific
+repo.sh
 03/03_Solutions/02/prep.sh
 03/03_Solutions/01/prep.sh
 03/03_Solutions/01/scp.sh

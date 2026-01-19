@@ -1,0 +1,6 @@
+projectKey=trafficlight-m324
+serverUrl=http://localhost:9000
+serverVersion=26.1.0.118079
+dashboardUrl=http://localhost:9000/dashboard?id=trafficlight-m324
+ceTaskId=5ec5b523-5dec-44c8-8f31-900187908a07
+ceTaskUrl=http://localhost:9000/api/ce/task?id=5ec5b523-5dec-44c8-8f31-900187908a07

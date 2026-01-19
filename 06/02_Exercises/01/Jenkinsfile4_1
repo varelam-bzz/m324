@@ -1,0 +1,76 @@
+pipeline {
+  environment {
+      //your-registry/traffic-api
+      registry = "varelambzz/traffic-light"
+      registryCredential = 'dockerhub'
+      //variable with name of container
+      //i.e. used in stage 'Run container for testing'
+      containerName = "traffic-light-container"
+      token=credentials('TOKEN') // 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
+  }
+  agent any
+  tools {nodejs "node"}
+  stages {
+      stage('Cloning a private Repo') {
+              steps {
+                script {
+                    git branch: 'main',
+                    url: "https://$token@github.com/varelam-bzz/traffic-light.git"
+             }
+           }
+      }
+      stage('Building image') {
+        steps{
+          script {
+            docker.build registry+":$BUILD_NUMBER"
+          }
+        }
+      }
+
+      stage('Test NodeJS Installation') {
+        steps {
+            sh 'npm --version; node --version'
+        }
+      }
+
+      stage('Install jest-cli') {
+          steps {
+              script {
+                  sh """
+                      echo "Installing jest-cli ..."
+                      npm install jest-cli -g
+                  """
+              }
+          }
+      }
+
+      stage('Install dependencies') {
+        steps {
+          sh 'npm install'
+        }
+      }
+
+      stage('Run container for testing') {
+        steps {
+            sh "docker run -itd --rm -p 3000:3000 --name ${containerName} $registry:$BUILD_NUMBER"
+        }
+      }
+      stage('Test') {
+        steps {
+           sh 'npm test'
+        }
+      }
+
+      stage('Remove traffic container') {
+        steps{
+            sh "docker stop ${containerName}"
+        }
+      }
+
+      stage('Remove Unused docker image') {
+        steps{
+            sh "docker rmi $registry:$BUILD_NUMBER"
+        }
+      }
+    }
+}

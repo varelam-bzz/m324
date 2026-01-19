@@ -1,0 +1,91 @@
+pipeline {
+  environment {
+      //your-registry/traffic-api
+      registry = "varelambzz/traffic-light"
+      registryCredential = 'dockerhub'
+      //variable with name of container
+      //i.e. used in stage 'Run container for testing'
+      containerName = "traffic-light-container"
+  }
+  agent any
+  tools {nodejs "node"}
+  stages {
+      stage('Cloning Repo') {
+              steps {
+                script {
+                    git branch: 'main',
+                    url: 'https://github.com/varelam-bzz/traffic-light.git'
+             }
+           }
+      }
+      stage('Building image') {
+        steps{
+          script {
+            docker.build registry+":$BUILD_NUMBER"
+          }
+        }
+      }
+
+     stage('Install jest-cli') {
+        steps {
+            script {
+                sh """
+                    //set -e to disable break-on-error which means:
+                    //script continues even if a command fails.
+                    set +e
+                    //check if jest-cli is installed
+                    PACKAGE=\$(npm ls -g -p | grep jest-cli)
+                    //if not then ...
+                    if [ -z "\$PACKAGE" ]
+                    then
+                        //write a message and install package
+                        echo "Installing jest-cli ..."
+                        npm install jest-cli -g
+                        //if an error occurred during installation then...
+                        if [ \$? -ne 0 ]
+                        then
+                            //write a message and exit with error-code > 0
+                            echo "Failed to install jest-cli!"
+                            exit 1
+                        fi
+                    else
+                        //write a message that package is already installed
+                        echo "jest-cli is already installed!"
+                    fi
+                    //enable break-on-error
+                    set -e
+                """
+            }
+        }
+    }
+
+      stage('Install dependencies') {
+        steps {
+            sh 'npm install'
+        }
+      }
+
+      stage('Run container for testing') {
+        steps {
+            sh "docker run -itd --rm -p 3000:3000 --name \$containerName \$registry:\$BUILD_NUMBER"
+        }
+      }
+      stage('Test') {
+        steps {
+            sh 'npm test'
+        }
+      }
+
+      stage('Remove traffic container') {
+        steps{
+            sh "docker stop \$containerName"
+        }
+      }
+
+      stage('Remove Unused docker image') {
+        steps{
+            sh "docker rmi \$registry:\$BUILD_NUMBER"
+        }
+      }
+    }
+}
